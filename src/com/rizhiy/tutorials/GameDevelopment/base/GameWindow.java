@@ -1,4 +1,4 @@
-package com.rizhiy.tutorials.GameDevelopment.GameLoop;
+package com.rizhiy.tutorials.GameDevelopment.base;
 
 import javax.swing.*;
 import java.awt.*;
