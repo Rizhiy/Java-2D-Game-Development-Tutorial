@@ -30,7 +30,7 @@ public class GameWindow extends JFrame {
     private void setFullScreenMode(){
         switch(fullScreenMode){
             case 0:
-                System.err.println("No Fullscreen");
+                System.out.println("No Fullscreen");
                 setUndecorated(false);
                 break;
             case 1:
