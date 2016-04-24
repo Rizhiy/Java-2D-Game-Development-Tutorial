@@ -1,6 +1,8 @@
 package com.rizhiy.tutorials.GameDevelopment.gameLoop;
 
 import com.rizhiy.tutorials.GameDevelopment.base.IDGameLoop;
+import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
+import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Assets;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.GameStateManager;
 
 import java.awt.*;
@@ -12,15 +14,22 @@ public class GameLoop extends IDGameLoop {
 
     GameStateManager StateManager;
 
+    public static Assets assets = new Assets();
+
+    public static double xOffset;
+    public static double yOffset;
+
     public GameLoop(int width, int height) {
         super(width,height);
     }
 
     @Override
     public void init(){
-        super.init();
+        assets.init();
+        Vector2D.setWorldCoordinates(xOffset,yOffset);
         StateManager = new GameStateManager();
         StateManager.init();
+        super.init();
     }
 
     @Override

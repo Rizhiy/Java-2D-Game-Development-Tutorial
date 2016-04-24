@@ -3,19 +3,18 @@ package com.rizhiy.tutorials.GameDevelopment.base;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.nio.file.Path;
 
 /**
  * Created by rizhiy on 23/04/16.
  */
 public class ImageLoader {
 
-    public static BufferedImage loadImageFrom(Class<?> classfile, String path) {
-        URL url = classfile.getResource(path);
+    public static BufferedImage loadImageFrom(Path path) {
         BufferedImage img = null;
 
         try {
-            img = ImageIO.read(url);
+            img = ImageIO.read(path.toFile());
         } catch (IOException e) {
             e.printStackTrace();
         }

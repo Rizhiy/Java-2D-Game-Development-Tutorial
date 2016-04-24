@@ -9,11 +9,12 @@ import java.awt.*;
 public class GameWindow extends JFrame {
     boolean fullScreen = false;
     int fullScreenMode = 0;
+    int display = 0;
 
-    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+    GraphicsDevice device = null;
 
 
-    public GameWindow(String title, int width, int height){
+    public GameWindow(String title, int width, int height, int display){
         setTitle(title);
         setSize(width,height);
 
@@ -22,6 +23,11 @@ public class GameWindow extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+        this.display = display;
+        setGraphicsDevice();
+    }
+    public GameWindow(String title, int width, int height){
+        this(title,width,height,0);
     }
     public GameWindow(){
         this("Main Window",720,480);
@@ -54,5 +60,10 @@ public class GameWindow extends JFrame {
         } else {
             System.err.println("Error "+mode+" is not Supported!");
         }
+    }
+
+    private void setGraphicsDevice(){
+        if(device == null) return;
+        device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[display];
     }
 }

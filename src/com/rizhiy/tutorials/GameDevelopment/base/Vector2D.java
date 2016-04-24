@@ -74,12 +74,40 @@ public class Vector2D {
         return new Vector2D(left.x + right.x, left.y + right.x);
     }
 
+    public void add(Vector2D other){
+        this.x += other.getX();
+        this.y += other.getY();
+    }
+
     public double getX() {
         return x;
     }
 
     public double getY() {
         return y;
+    }
+
+    public void changeX(double change){
+        x += change;
+    }
+
+    public void incX(){
+        changeX(1.0);
+    }
+
+    public void decX(){
+        changeX(-1.0);
+    }
+
+    public void changeY(double change){
+        y += change;
+    }
+
+    public void incY(){
+        changeY(1.0);
+    }
+    public void decY(){
+        changeY(-1.0);
     }
 
     public static void setWorldCoordinates(double x, double y){
