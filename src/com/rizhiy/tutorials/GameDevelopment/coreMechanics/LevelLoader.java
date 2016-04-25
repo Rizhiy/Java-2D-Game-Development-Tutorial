@@ -1,5 +1,7 @@
 package com.rizhiy.tutorials.GameDevelopment.coreMechanics;
 
+import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
+import com.rizhiy.tutorials.GameDevelopment.gameLoop.GameLoop;
 import com.rizhiy.tutorials.GameDevelopment.generator.Map;
 
 import java.awt.*;
@@ -19,6 +21,7 @@ public class LevelLoader extends GameState{
     public void init() {
         map = new Map();
         map.init();
+        GameLoop.map = new Vector2D((Map.width-Main.width/Map.TileSize)/2,(Map.height-Main.height/Map.TileSize)/2);
     }
 
     @Override
@@ -28,7 +31,6 @@ public class LevelLoader extends GameState{
 
     @Override
     public void render(Graphics2D g) {
-        g.drawString("Hello World!", 200,200);
         map.render(g);
     }
 }

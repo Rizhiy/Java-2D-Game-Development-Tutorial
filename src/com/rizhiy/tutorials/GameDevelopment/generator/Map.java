@@ -14,6 +14,9 @@ import java.nio.file.Paths;
  */
 public class Map {
 
+    public static int width;
+    public static int height;
+
     public static int TileSize = 48;
 
     Player player = new Player();
@@ -42,6 +45,9 @@ public class Map {
                 }
             }
         }
+
+        width = map.getWidth();
+        height = map.getHeight();
     }
 
     public void tick(double deltaTime){
