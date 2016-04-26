@@ -38,9 +38,12 @@ public class Map {
         for(int x = 0; x < map.getWidth(); x++){
             for(int y = 0; y < map.getHeight(); y++){
                 int colour = map.getRGB(x,y);
-                switch(colour & 0x505050){
-                    case 0x505050:
-                        tiles.blocks.add(new Block(new Vector2D(x,y), Block.BlockType.STONE_1));
+                switch(colour & 0xFFFFFF){
+                    case 0x808080:
+                        tiles.blocks.add(new Block(new Vector2D(x*TileSize,y*TileSize), Block.BlockType.STONE_1));
+                        break;
+                    case 0x404040:
+                        tiles.blocks.add(new Block(new Vector2D(x*TileSize,y*TileSize), Block.BlockType.WALL_1, true));
                         break;
                 }
             }
@@ -53,7 +56,6 @@ public class Map {
     public void tick(double deltaTime){
         tiles.tick(deltaTime);
         player.tick(deltaTime);
-
     }
 
     public void render(Graphics2D g){

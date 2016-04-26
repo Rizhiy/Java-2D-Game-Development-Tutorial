@@ -4,8 +4,6 @@ import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Assets;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-
 /**
  * Created by rizhiy on 24/04/16.
  */
@@ -13,29 +11,39 @@ public class Block extends Rectangle {
     Vector2D position = new Vector2D();
 
     private BlockType type;
-    private BufferedImage img;
+    private boolean solid;
 
-    public Block(Vector2D pos,BlockType type){
+    public Block(Vector2D pos,BlockType type, boolean solid){
         this.position = pos;
         this.type = type;
+        this.solid = solid;
         init();
     }
 
+    public Block(Vector2D pos,BlockType type){
+        this(pos,type,false);
+    }
+
     public void init(){
-        switch (type){
-            case STONE_1:
-                img = Assets.getStone_1();
-                break;
-        }
+        this.x = (int) position.getX();
+        this.y = (int) position.getY();
+        this.height = Map.TileSize;
+        this.width = Map.TileSize;
+
     }
     public void tick(double deltaTime){
 
     }
     public void render(Graphics2D g){
-        g.drawImage(img, (int) (position.getWorldLocation().getX()*Map.TileSize), (int) (position.getWorldLocation().getY()*Map.TileSize),Map.TileSize,Map.TileSize,null);
+        g.drawImage(Assets.getImage(type), (int) (position.getWorldLocation().getX()), (int) (position.getWorldLocation().getY()),Map.TileSize,Map.TileSize,null);
+    }
+
+    public boolean isSolid() {
+        return solid;
     }
 
     public enum BlockType {
-        STONE_1
+        STONE_1,
+        WALL_1
     }
 }

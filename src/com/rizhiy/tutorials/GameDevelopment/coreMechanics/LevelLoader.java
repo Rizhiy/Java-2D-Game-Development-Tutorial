@@ -21,7 +21,7 @@ public class LevelLoader extends GameState{
     public void init() {
         map = new Map();
         map.init();
-        GameLoop.map = new Vector2D((Map.width-Main.width/Map.TileSize)/2,(Map.height-Main.height/Map.TileSize)/2);
+        GameLoop.map = new Vector2D((Map.width*Map.TileSize-Main.width)/2,(Map.height*Map.TileSize-Main.height)/2);
     }
 
     @Override

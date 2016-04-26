@@ -39,7 +39,9 @@ public class GameLoop extends IDGameLoop {
     public void render(){
         super.render();
         StateManager.render(graphics2D);
+        graphics2D.drawString("FPS: "+FPS+", TPS: "+TPS,200,200);
         clear();
+
     }
 
     @Override

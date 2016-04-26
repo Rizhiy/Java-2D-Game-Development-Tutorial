@@ -11,8 +11,8 @@ public class IDGameLoop extends JPanel implements Runnable {
     private Thread mainThread;
     private boolean running;
 
-    private int FPS;
-    private int TPS;
+    protected int FPS;
+    protected int TPS;
 
     private int width;
     private int height;
@@ -48,53 +48,43 @@ public class IDGameLoop extends JPanel implements Runnable {
         init();
 
         long lastTime = System.nanoTime();
-        double nsPerTick = 1000000000 / currentFPS;
+        double nsPerFrame = 1000000000 / currentFPS;
         int frames = 0;
         int ticks = 0;
         long lastTimer = System.currentTimeMillis();
 
-        //Adjust computation if going slow or fast
-        double deltaTime = 0;
+        double timeUntilNextFrame;
+
+        long prev = System.nanoTime();
 
         while (running) {
-            long now = System.nanoTime();
-            deltaTime += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            boolean shouldRender = false;
-
-            while (deltaTime >= 1) {
+            do {
+                //TODO: find out why we are three orders of magnitudes off
+                tick((System.nanoTime() - prev)/1_000_000.0);
+                timeUntilNextFrame = System.nanoTime() - lastTime;
+                prev = System.nanoTime();
                 ticks++;
-                /*TICK + DELTATIME*/
-                tick(deltaTime);
-                deltaTime -= 1;
-                shouldRender = true;
-            }
+            } while (timeUntilNextFrame < nsPerFrame);
 
-            if (shouldRender) {
                 /*RENDER*/
-                frames++;
-                render();
-            }
-
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            frames++;
+            render();
+            lastTime = System.nanoTime();
 
             if (System.currentTimeMillis() - lastTimer >= 1000) {
-                lastTimer += 1000;
-                TPS = frames;
-                FPS = ticks;
+                TPS = ticks;
+                FPS = frames;
                 frames = 0;
                 ticks = 0;
+                lastTimer = System.currentTimeMillis();
             }
+            prev = System.nanoTime();
         }
 
     }
 
     public void init() {
-        background = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+        background = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         graphics2D = (Graphics2D) background.getGraphics();
         running = true;
     }
@@ -103,13 +93,13 @@ public class IDGameLoop extends JPanel implements Runnable {
     }
 
     public void render() {
-        graphics2D.clearRect(0,0,width,height);
+        graphics2D.clearRect(0, 0, width, height);
     }
 
-    public void clear(){
+    public void clear() {
         Graphics g2 = getGraphics();
-        if(background != null){
-            g2.drawImage(background,0,0,null);
+        if (background != null) {
+            g2.drawImage(background, 0, 0, null);
         }
     }
 

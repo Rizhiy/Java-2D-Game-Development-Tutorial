@@ -1,5 +1,7 @@
 package com.rizhiy.tutorials.GameDevelopment.base;
 
+import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Assets;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -8,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class SpriteSheet {
     private BufferedImage spriteSheet;
 
-    public SpriteSheet(){
+    public SpriteSheet() {
 
     }
 
@@ -16,8 +18,8 @@ public class SpriteSheet {
         this.spriteSheet = spriteSheet;
     }
 
-    public BufferedImage getTile(int x, int y, int width, int height){
-        BufferedImage sprite = spriteSheet.getSubimage(x,y,width,height);
+    public BufferedImage getTile(int x, int y, int width, int height) {
+        BufferedImage sprite = spriteSheet.getSubimage(x * Assets.textureSize, y * Assets.textureSize, width, height);
         return sprite;
     }
 }
