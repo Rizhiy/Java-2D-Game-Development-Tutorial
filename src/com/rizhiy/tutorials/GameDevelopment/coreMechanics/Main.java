@@ -33,7 +33,8 @@ public class Main {
 
         GameWindow mainWindow = new GameWindow("A Game", width, height, monitor);
         mainWindow.setFullScreen(monitor);
-        mainWindow.addKeyListener(state.map.getPlayer());
+        mainWindow.addKeyListener(GameState.map.getPlayer());
+        mainWindow.addKeyListener(state);
         mainWindow.add(renderLoop);
 
         Thread physicsLoopThread = new Thread(physicsLoop);

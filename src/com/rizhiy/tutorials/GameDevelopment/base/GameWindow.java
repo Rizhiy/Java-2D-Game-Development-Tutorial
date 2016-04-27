@@ -29,9 +29,6 @@ public class GameWindow extends JFrame {
     public GameWindow(String title, int width, int height){
         this(title,width,height,0);
     }
-    public GameWindow(){
-        this("Main Window",720,480);
-    }
 
     private void setFullScreenMode(){
         switch(fullScreenMode){

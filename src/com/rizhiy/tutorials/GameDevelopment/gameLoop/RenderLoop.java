@@ -36,6 +36,7 @@ public class RenderLoop extends IDRenderLoop {
         gameState.render(graphics2D);
         graphics2D.drawString("FPS: "+getCurrentRefreshRate()+", TPS: "+renderLoop.getCurrentRefreshRate(),200,200);
         graphics2D.drawString("Player Position: "+GameState.map.getPlayer().getPosition(),200,300);
+        graphics2D.drawString("Zoom: "+GameState.zoomLevel,200,400);
         clear();
     }
 

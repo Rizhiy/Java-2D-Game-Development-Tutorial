@@ -3,7 +3,6 @@ package com.rizhiy.tutorials.GameDevelopment.movableObjects;
 import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Check;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.GameState;
-import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Main;
 import com.rizhiy.tutorials.GameDevelopment.generator.Map;
 
 import java.awt.*;
@@ -136,9 +135,7 @@ public class Player implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        int key = keyEvent.getKeyCode();
-
-        switch (key) {
+        switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_W:
                 up = true;
                 break;
@@ -156,9 +153,7 @@ public class Player implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent keyEvent) {
-        int key = keyEvent.getKeyCode();
-
-        switch (key) {
+        switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_W:
                 up = false;
                 break;
