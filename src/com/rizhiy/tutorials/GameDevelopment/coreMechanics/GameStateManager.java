@@ -12,18 +12,18 @@ public class GameStateManager {
 
     public GameStateManager(){
         states = new Stack<>();
-        states.push(new LevelLoader(this));
+        states.push(new GameState());
     }
 
-    public void tick(double deltaTime){
+    public static void tick(double deltaTime){
         states.peek().tick(deltaTime);
     }
 
-    public void render(Graphics2D g){
+    public static void render(Graphics2D g){
         states.peek().render(g);
     }
 
-    public void init() {
+    public static void init() {
         states.peek().init();
     }
 }

@@ -1,7 +1,8 @@
 package com.rizhiy.tutorials.GameDevelopment.coreMechanics;
 
 import com.rizhiy.tutorials.GameDevelopment.base.GameWindow;
-import com.rizhiy.tutorials.GameDevelopment.gameLoop.GameLoop;
+import com.rizhiy.tutorials.GameDevelopment.gameLoop.PhysicsLoop;
+import com.rizhiy.tutorials.GameDevelopment.gameLoop.RenderLoop;
 import com.rizhiy.tutorials.GameDevelopment.movableObjects.Player;
 
 import java.awt.*;
@@ -19,10 +20,24 @@ public class Main {
     public static int display = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
 
     public static void main(String[] args){
+        GameState state = new GameState();
+        PhysicsLoop physicsLoop = new PhysicsLoop(state,100);
+        RenderLoop renderLoop = new RenderLoop(width,height,60,state);
+
+        state.init();
+        physicsLoop.init();
+        renderLoop.init();
+
         GameWindow mainWindow = new GameWindow("A Game", width, height, monitor);
         mainWindow.setFullScreen(monitor);
         mainWindow.addKeyListener(new Player());
-        mainWindow.add(new GameLoop(width,height));
+        mainWindow.add(renderLoop);
+
+        Thread physicsLoopThread = new Thread(physicsLoop);
+        Thread renderLoopThread = new Thread(renderLoop);
+        physicsLoopThread.start();
+        renderLoopThread.start();
+
         mainWindow.setVisible(true);
     }
 }

@@ -2,8 +2,8 @@ package com.rizhiy.tutorials.GameDevelopment.movableObjects;
 
 import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Check;
+import com.rizhiy.tutorials.GameDevelopment.coreMechanics.GameState;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Main;
-import com.rizhiy.tutorials.GameDevelopment.gameLoop.GameLoop;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -68,20 +68,20 @@ public class Player implements KeyListener {
         Point p1 = null, p2 = null;
         switch (d) {
             case UP:
-                p1 = new Point((int) (position.getX() + GameLoop.map.getX()), (int) (position.getY() + GameLoop.map.getY() - change));
-                p2 = new Point((int) (position.getX() + GameLoop.map.getX()) + TileSize, (int) ((position.getY() + GameLoop.map.getY()) - change));
+                p1 = new Point((int) (position.getX() + GameState.mapPosition.getX()), (int) (position.getY() + GameState.mapPosition.getY() - change));
+                p2 = new Point((int) (position.getX() + GameState.mapPosition.getX()) + TileSize, (int) ((position.getY() + GameState.mapPosition.getY()) - change));
                 break;
             case DOWN:
-                p1 = new Point((int) (position.getX() + GameLoop.map.getX()), (int) ((position.getY() + GameLoop.map.getY()) + TileSize + change));
-                p2 = new Point((int) (position.getX() + GameLoop.map.getX()) + TileSize, (int) ((position.getY() + GameLoop.map.getY()) + TileSize + change));
+                p1 = new Point((int) (position.getX() + GameState.mapPosition.getX()), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize + change));
+                p2 = new Point((int) (position.getX() + GameState.mapPosition.getX()) + TileSize, (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize + change));
                 break;
             case LEFT:
-                p1 = new Point((int) ((position.getX() + GameLoop.map.getX()) - change), (int) ((position.getY() + GameLoop.map.getY())));
-                p2 = new Point((int) ((position.getX() + GameLoop.map.getX()) - change), (int) ((position.getY() + GameLoop.map.getY()) + TileSize));
+                p1 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) - change), (int) ((position.getY() + GameState.mapPosition.getY())));
+                p2 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) - change), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize));
                 break;
             case RIGHT:
-                p1 = new Point((int) ((position.getX() + GameLoop.map.getX()) + TileSize + change), (int) ((position.getY() + GameLoop.map.getY())));
-                p2 = new Point((int) ((position.getX() + GameLoop.map.getX()) + TileSize + change), (int) ((position.getY() + GameLoop.map.getY()) + TileSize));
+                p1 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) + TileSize + change), (int) ((position.getY() + GameState.mapPosition.getY())));
+                p2 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) + TileSize + change), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize));
                 break;
         }
         return Check.CollisionPlayerBlock(p1, p2);
@@ -113,7 +113,7 @@ public class Player implements KeyListener {
         if (!mapMove) {
             updateVector(position, deltaTime);
         } else {
-            updateVector(GameLoop.map, deltaTime);
+            updateVector(GameState.mapPosition, deltaTime);
         }
 
     }
