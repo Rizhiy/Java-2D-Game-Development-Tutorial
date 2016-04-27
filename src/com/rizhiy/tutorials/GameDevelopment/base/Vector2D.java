@@ -7,9 +7,6 @@ public class Vector2D {
     private double x;
     private double y;
 
-    public static double worldXPos;
-    public static double worldYPos;
-
     public Vector2D(Vector2D other){
         x = other.x;
         y = other.y;
@@ -21,17 +18,12 @@ public class Vector2D {
 
     @Override
     public String toString() {
-        return '('+ x +","+y+')';
+        return  "("+ x +","+y+")";
     }
 
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
-    }
-
-
-    public Vector2D getWorldLocation(){
-        return new Vector2D(x - worldXPos, y - worldYPos);
     }
 
     public static Vector2D zero(){
@@ -110,12 +102,6 @@ public class Vector2D {
         changeY(-1.0);
     }
 
-    public static void setWorldCoordinates(double x, double y){
-        worldXPos = x;
-        worldYPos = y;
-
-    }
-
     public static double getDistanceOnScreen(Vector2D vec1, Vector2D vec2){
         double dx = vec1.getX() - vec2.getX();
         double dy = vec1.getY() - vec2.getY();
@@ -124,8 +110,8 @@ public class Vector2D {
 
     //Not sure if this is needed
     public static double getDistanceBetweenWorldVectors(Vector2D vec1, Vector2D vec2){
-        double dx = vec1.getWorldLocation().getX() - vec2.getWorldLocation().getX();
-        double dy = vec1.getWorldLocation().getY() - vec2.getWorldLocation().getY();
+        double dx = vec1.getX() - vec2.getX();
+        double dy = vec1.getY() - vec2.getY();
         return Math.sqrt(dx*dx + dy*dy);
     }
 

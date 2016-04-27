@@ -1,5 +1,6 @@
 package com.rizhiy.tutorials.GameDevelopment.gameLoop;
 
+import com.rizhiy.tutorials.GameDevelopment.base.IDPhysicsLoop;
 import com.rizhiy.tutorials.GameDevelopment.base.IDRenderLoop;
 import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Assets;
@@ -12,19 +13,19 @@ public class RenderLoop extends IDRenderLoop {
 
     public GameState gameState;
 
+    public IDPhysicsLoop renderLoop;
+
     public static Assets assets = new Assets();
 
-    public static Vector2D map = new Vector2D();
-
-    public RenderLoop(int width, int height,int refreshRate, GameState state) {
+    public RenderLoop(int width, int height,int refreshRate, GameState state, PhysicsLoop renderLoop) {
         super(width,height,refreshRate);
-        gameState = state;
+        this.gameState = state;
+        this.renderLoop = renderLoop;
     }
 
     @Override
     public void init(){
         assets.init();
-        Vector2D.setWorldCoordinates(map.getX(),map.getY());
         super.init();
     }
 
@@ -33,9 +34,9 @@ public class RenderLoop extends IDRenderLoop {
     public void render(){
         super.render();
         gameState.render(graphics2D);
-        graphics2D.drawString("FPS: "+getCurrentRefreshRate(),200,200);
+        graphics2D.drawString("FPS: "+getCurrentRefreshRate()+", TPS: "+renderLoop.getCurrentRefreshRate(),200,200);
+        graphics2D.drawString("Player Position: "+GameState.map.getPlayer().getPosition(),200,300);
         clear();
-
     }
 
     @Override

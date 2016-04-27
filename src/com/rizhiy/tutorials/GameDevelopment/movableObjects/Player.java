@@ -4,6 +4,7 @@ import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Check;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.GameState;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Main;
+import com.rizhiy.tutorials.GameDevelopment.generator.Map;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,17 +15,16 @@ import java.awt.event.KeyListener;
  */
 public class Player implements KeyListener {
 
+    //ration by which maxSpeed we be reached. Higher values lead to faster acc/decelerations.
     private double acceleration = 1;
     private double deceleration = 1;
 
-    Vector2D position;
+    private Vector2D position;
 
-    public static int TileSize = 42;
+    public static double size = 0.8;
 
     private static boolean up, right, down, left;
-    private double maxSpeed = 300;
-
-    private boolean mapMove = false;
+    private double maxSpeed = 5;
 
     /**
      * UP,DOWN,LEFT,RIGHT
@@ -48,46 +48,49 @@ public class Player implements KeyListener {
 
 
     public Player() {
-        position = new Vector2D((Main.width) / 2, (Main.height) / 2);
     }
 
     public void init() {
+        position = new Vector2D(Map.width / 2, Map.height / 2);
     }
 
     private void updateSpeed(boolean direction, int index, double deltaTime) {
+        double change;
         if (direction) {
-            if (speeds[index] < maxSpeed) speeds[index] += maxSpeed*acceleration * deltaTime;
+            change  = maxSpeed * acceleration * deltaTime;
+            if (speeds[index] + change < maxSpeed) speeds[index] += change;
             else speeds[index] = maxSpeed;
         } else {
-            if (speeds[index] > 0) speeds[index] -= maxSpeed * deceleration * deltaTime;
+            change = maxSpeed * deceleration * deltaTime;
+            if (speeds[index] - change > 0) speeds[index] -= change;
             else speeds[index] = 0;
         }
     }
 
     private boolean checkCollision(SPEED d, double change) {
-        Point p1 = null, p2 = null;
+        Vector2D p1 = null, p2 = null;
         switch (d) {
             case UP:
-                p1 = new Point((int) (position.getX() + GameState.mapPosition.getX()), (int) (position.getY() + GameState.mapPosition.getY() - change));
-                p2 = new Point((int) (position.getX() + GameState.mapPosition.getX()) + TileSize, (int) ((position.getY() + GameState.mapPosition.getY()) - change));
+                p1 = new Vector2D(position.getX(), position.getY() - change);
+                p2 = new Vector2D(position.getX() + size, position.getY() - change);
                 break;
             case DOWN:
-                p1 = new Point((int) (position.getX() + GameState.mapPosition.getX()), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize + change));
-                p2 = new Point((int) (position.getX() + GameState.mapPosition.getX()) + TileSize, (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize + change));
+                p1 = new Vector2D(position.getX(),position.getY() + size + change);
+                p2 = new Vector2D(position.getX() + size,position.getY() + size + change);
                 break;
             case LEFT:
-                p1 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) - change), (int) ((position.getY() + GameState.mapPosition.getY())));
-                p2 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) - change), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize));
+                p1 = new Vector2D(position.getX() - change,position.getY());
+                p2 = new Vector2D(position.getX() - change,position.getY() + size);
                 break;
             case RIGHT:
-                p1 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) + TileSize + change), (int) ((position.getY() + GameState.mapPosition.getY())));
-                p2 = new Point((int) ((position.getX() + GameState.mapPosition.getX()) + TileSize + change), (int) ((position.getY() + GameState.mapPosition.getY()) + TileSize));
+                p1 = new Vector2D(position.getX() + size + change,position.getY());
+                p2 = new Vector2D(position.getX() + size + change,position.getY() + size);
                 break;
         }
         return Check.CollisionPlayerBlock(p1, p2);
     }
 
-    private void updateVector(Vector2D vector, double deltaTime) {
+    private void updateVector(Vector2D vector, double deltaTime,boolean map) {
         updateSpeed(up, SPEED.UP.getCode(), deltaTime);
         updateSpeed(down, SPEED.DOWN.getCode(), deltaTime);
         updateSpeed(left, SPEED.LEFT.getCode(), deltaTime);
@@ -97,6 +100,13 @@ public class Player implements KeyListener {
         double changeD = speeds[SPEED.DOWN.getCode()] * deltaTime;
         double changeL = speeds[SPEED.LEFT.getCode()] * deltaTime;
         double changeR = speeds[SPEED.RIGHT.getCode()] * deltaTime;
+
+        if(map){
+            changeU *= -Map.getTileSize();
+            changeD *= -Map.getTileSize();
+            changeL *= -Map.getTileSize();
+            changeR *= -Map.getTileSize();
+        }
 
         if (!checkCollision(SPEED.UP, changeU)) vector.changeY(-changeU);
         else speeds[SPEED.UP.getCode()] = 0;
@@ -109,17 +119,14 @@ public class Player implements KeyListener {
     }
 
     public void tick(double deltaTime) {
-
-        if (!mapMove) {
-            updateVector(position, deltaTime);
-        } else {
-            updateVector(GameState.mapPosition, deltaTime);
-        }
-
+        updateVector(position, deltaTime,false);
+        if(!GameState.playerMove) updateVector(GameState.mapPosition,deltaTime,true);
     }
 
     public void render(Graphics2D g) {
-        g.fillRect((int) (position.getX()), (int) (position.getY()), TileSize, TileSize);
+        g.fillRect((int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
+                   (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
+                   (int) (Map.getTileSize()*size), (int) (Map.getTileSize()*size));
     }
 
     @Override
@@ -166,5 +173,9 @@ public class Player implements KeyListener {
                 break;
         }
 
+    }
+
+    public Vector2D getPosition(){
+        return position;
     }
 }

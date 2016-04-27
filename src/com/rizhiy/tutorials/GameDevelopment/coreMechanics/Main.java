@@ -21,16 +21,19 @@ public class Main {
 
     public static void main(String[] args){
         GameState state = new GameState();
-        PhysicsLoop physicsLoop = new PhysicsLoop(state,100);
-        RenderLoop renderLoop = new RenderLoop(width,height,60,state);
-
         state.init();
+        PhysicsLoop physicsLoop = new PhysicsLoop(state,100);
         physicsLoop.init();
+        RenderLoop renderLoop = new RenderLoop(width,height,60,state,physicsLoop);
         renderLoop.init();
+
+
+
+
 
         GameWindow mainWindow = new GameWindow("A Game", width, height, monitor);
         mainWindow.setFullScreen(monitor);
-        mainWindow.addKeyListener(new Player());
+        mainWindow.addKeyListener(state.map.getPlayer());
         mainWindow.add(renderLoop);
 
         Thread physicsLoopThread = new Thread(physicsLoop);

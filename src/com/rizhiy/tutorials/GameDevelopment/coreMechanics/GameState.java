@@ -10,9 +10,13 @@ import java.awt.*;
  */
 public class GameState {
 
-    static Map map;
+    public static final double zoomLevel = 1.5;
+
+    public static Map map;
 
     public static Vector2D mapPosition = new Vector2D();
+
+    public static boolean playerMove = true;
 
 
     public GameState(){
@@ -22,7 +26,7 @@ public class GameState {
     public void init() {
         map = new Map();
         map.init();
-        mapPosition = new Vector2D((Map.width*Map.TileSize-Main.width)/2,(Map.height*Map.TileSize-Main.height)/2);
+        mapPosition = new Vector2D((-Map.width*Map.getTileSize()+Main.width)/2,(-Map.height*Map.getTileSize()+Main.height)/2);
     }
 
     public void tick(double deltaTime) {
