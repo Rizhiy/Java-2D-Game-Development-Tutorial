@@ -56,7 +56,7 @@ public class Player implements KeyListener {
     private void updateSpeed(boolean direction, int index, double deltaTime) {
         double change;
         if (direction) {
-            change  = maxSpeed * acceleration * deltaTime;
+            change = maxSpeed * acceleration * deltaTime;
             if (speeds[index] + change < maxSpeed) speeds[index] += change;
             else speeds[index] = maxSpeed;
         } else {
@@ -74,22 +74,22 @@ public class Player implements KeyListener {
                 p2 = new Vector2D(position.getX() + size, position.getY() - change);
                 break;
             case DOWN:
-                p1 = new Vector2D(position.getX(),position.getY() + size + change);
-                p2 = new Vector2D(position.getX() + size,position.getY() + size + change);
+                p1 = new Vector2D(position.getX(), position.getY() + size + change);
+                p2 = new Vector2D(position.getX() + size, position.getY() + size + change);
                 break;
             case LEFT:
-                p1 = new Vector2D(position.getX() - change,position.getY());
-                p2 = new Vector2D(position.getX() - change,position.getY() + size);
+                p1 = new Vector2D(position.getX() - change, position.getY());
+                p2 = new Vector2D(position.getX() - change, position.getY() + size);
                 break;
             case RIGHT:
-                p1 = new Vector2D(position.getX() + size + change,position.getY());
-                p2 = new Vector2D(position.getX() + size + change,position.getY() + size);
+                p1 = new Vector2D(position.getX() + size + change, position.getY());
+                p2 = new Vector2D(position.getX() + size + change, position.getY() + size);
                 break;
         }
         return Check.CollisionPlayerBlock(p1, p2);
     }
 
-    private void updateVector(Vector2D vector, double deltaTime,boolean map) {
+    private void updateVector(Vector2D vector, double deltaTime, boolean map) {
         updateSpeed(up, SPEED.UP.getCode(), deltaTime);
         updateSpeed(down, SPEED.DOWN.getCode(), deltaTime);
         updateSpeed(left, SPEED.LEFT.getCode(), deltaTime);
@@ -100,7 +100,7 @@ public class Player implements KeyListener {
         double changeL = speeds[SPEED.LEFT.getCode()] * deltaTime;
         double changeR = speeds[SPEED.RIGHT.getCode()] * deltaTime;
 
-        if(map){
+        if (map) {
             changeU *= -Map.getTileSize();
             changeD *= -Map.getTileSize();
             changeL *= -Map.getTileSize();
@@ -118,14 +118,14 @@ public class Player implements KeyListener {
     }
 
     public void tick(double deltaTime) {
-        updateVector(position, deltaTime,false);
-        if(!GameState.playerMove) updateVector(GameState.mapPosition,deltaTime,true);
+        updateVector(position, deltaTime, false);
+        if (!GameState.playerMove) updateVector(GameState.mapPosition, deltaTime, true);
     }
 
     public void render(Graphics2D g) {
         g.fillRect((int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
                    (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
-                   (int) (Map.getTileSize()*size), (int) (Map.getTileSize()*size));
+                   (int) (Map.getTileSize() * size), (int) (Map.getTileSize() * size));
     }
 
     @Override
@@ -170,7 +170,7 @@ public class Player implements KeyListener {
 
     }
 
-    public Vector2D getPosition(){
+    public Vector2D getPosition() {
         return position;
     }
 }

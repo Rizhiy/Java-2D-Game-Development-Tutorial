@@ -21,10 +21,10 @@ public class GameState implements KeyListener {
 
     public static boolean playerMove = true;
 
-    private boolean increaseZoom,decreaseZoom;
+    private boolean increaseZoom, decreaseZoom;
 
 
-    public GameState(){
+    public GameState() {
         this.increaseZoom = false;
         this.decreaseZoom = false;
     }
@@ -32,26 +32,26 @@ public class GameState implements KeyListener {
     public void init() {
         map = new Map();
         map.init();
-        mapPosition = new Vector2D((-Map.width*Map.getTileSize()+Main.width)/2,(-Map.height*Map.getTileSize()+Main.height)/2);
+        mapPosition = new Vector2D(Main.width / 2 - map.getPlayer().getPosition().getX() * Map.getTileSize(),
+                                   Main.height / 2 - map.getPlayer().getPosition().getY() * Map.getTileSize());
     }
 
     public synchronized void tick(double deltaTime) {
         map.tick(deltaTime);
 
         //TODO: fix zoom
-        if(increaseZoom){
-            mapPosition.changeX(+Map.width*Map.getTileSize());
-            mapPosition.changeY(+Map.height*Map.getTileSize());
+        if (increaseZoom) {
+            mapPosition.changeX(+Map.width * Map.getTileSize());
+            mapPosition.changeY(+Map.height * Map.getTileSize());
             zoomLevel *= zoomChangeRate;
-            mapPosition.changeX(-Map.width*Map.getTileSize());
-            mapPosition.changeY(-Map.height*Map.getTileSize());
+            mapPosition.changeY(-Map.height * Map.getTileSize());
         }
-        if(decreaseZoom){
-            mapPosition.changeX(+Map.width*Map.getTileSize());
-            mapPosition.changeY(+Map.height*Map.getTileSize());
+        if (decreaseZoom) {
+            mapPosition.changeX(+Map.width * Map.getTileSize());
+            mapPosition.changeY(+Map.height * Map.getTileSize());
             zoomLevel /= zoomChangeRate;
-            mapPosition.changeX(-Map.width*Map.getTileSize());
-            mapPosition.changeY(-Map.height*Map.getTileSize());
+            mapPosition.changeX(-Map.width * Map.getTileSize());
+            mapPosition.changeY(-Map.height * Map.getTileSize());
         }
     }
 
@@ -76,6 +76,8 @@ public class GameState implements KeyListener {
             case KeyEvent.VK_ENTER:
                 playerMove = false;
                 break;
+            case KeyEvent.VK_ESCAPE:
+                System.exit(0);
         }
     }
 
