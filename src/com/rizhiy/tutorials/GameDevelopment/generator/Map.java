@@ -39,11 +39,14 @@ public class Map {
             for(int y = 0; y < map.getHeight(); y++){
                 int colour = map.getRGB(x,y);
                 switch(colour & 0xFFFFFF){
-                    case 0x808080:
+                    case 0xa0a0a0:
                         tiles.blocks.add(new Block(new Vector2D(x,y), Block.BlockType.STONE_1));
                         break;
                     case 0x404040:
                         tiles.blocks.add(new Block(new Vector2D(x,y), Block.BlockType.WALL_1, true));
+                        break;
+                    case 0x402000:
+                        tiles.blocks.add(new Block(new Vector2D(x,y), Block.BlockType.WOOD_FLOOR_1));
                         break;
                 }
             }

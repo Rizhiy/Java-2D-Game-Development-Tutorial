@@ -3,10 +3,13 @@ package com.rizhiy.tutorials.GameDevelopment.coreMechanics;
 import com.rizhiy.tutorials.GameDevelopment.base.ImageLoader;
 import com.rizhiy.tutorials.GameDevelopment.base.SpriteSheet;
 import com.rizhiy.tutorials.GameDevelopment.generator.Block;
+import com.rizhiy.tutorials.GameDevelopment.movableObjects.Player;
 
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by rizhiy on 24/04/16.
@@ -14,30 +17,41 @@ import java.nio.file.Paths;
 public class Assets {
 
     public static final int textureSize = 16;
-    public static final Path SPRITE_SHEET_PATH = Paths.get(System.getProperty("user.dir") + "/Sprites/SPRITESHEET.png");
+    private static final Path SPRITE_SHEET_PATH = Paths.get(System.getProperty("user.dir") + "/Sprites/SPRITESHEET.png");
+    private static final Path PLAYER_SHEET_PATH = Paths.get(System.getProperty("user.dir") + "/Sprites/PLAYERSHEET.png");
 
-    SpriteSheet blocks = new SpriteSheet();
+    private static SpriteSheet blocks = new SpriteSheet();
+    private static SpriteSheet player = new SpriteSheet();
 
-    private static BufferedImage stone_1;
-    private static BufferedImage wall_1;
-    private static BufferedImage defaultImage;
+    private static Map<Block.BlockType,BufferedImage> tiles = new HashMap<>();
 
-    public void init() {
+    public static void init() {
         blocks.setSpriteSheet(ImageLoader.loadImageFrom(SPRITE_SHEET_PATH));
+        player.setSpriteSheet(ImageLoader.loadImageFrom(PLAYER_SHEET_PATH));
 
-        stone_1 = blocks.getTile(0, 0, textureSize, textureSize);
-        wall_1 = blocks.getTile(0, 1, textureSize, textureSize);
-        defaultImage = blocks.getTile(0,2,textureSize,textureSize);
+        tiles.put(Block.BlockType.STONE_1,blocks.getTile(0, 0, textureSize, textureSize));
+        tiles.put(Block.BlockType.WALL_1,blocks.getTile(0, 1, textureSize, textureSize));
+        tiles.put(Block.BlockType.WOOD_FLOOR_1,blocks.getTile(0, 2, textureSize, textureSize));
     }
 
-    public static BufferedImage getImage(Block.BlockType type) {
-        switch (type) {
-            case STONE_1:
-                return stone_1;
-            case WALL_1:
-                return wall_1;
+    public static BufferedImage getBlock(Block.BlockType type) {
+        return tiles.get(type);
+    }
+
+    public static BufferedImage getPlayerAnimation(Player.MoveDirection direction, int frame){
+        switch (direction){
+            case UP:
+                return player.getTile(frame,0,textureSize,textureSize);
+            case DOWN:
+                return player.getTile(frame,1,textureSize,textureSize);
+            case LEFT:
+                return player.getTile(frame,3,textureSize,textureSize);
+            case RIGHT:
+                return player.getTile(frame,4,textureSize,textureSize);
+            case IDLE:
+                return player.getTile(frame,2,textureSize,textureSize);
             default:
-                return defaultImage;
+                throw new IndexOutOfBoundsException();
         }
     }
 

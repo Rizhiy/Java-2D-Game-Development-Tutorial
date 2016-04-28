@@ -7,9 +7,9 @@ public class Vector2D {
     private double x;
     private double y;
 
-    public Vector2D(Vector2D other){
-        x = other.x;
-        y = other.y;
+    public Vector2D(Vector2D original){
+        x = original.x;
+        y = original.y;
     }
 
     public Vector2D(){

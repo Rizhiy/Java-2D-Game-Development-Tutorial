@@ -1,6 +1,10 @@
 package com.rizhiy.tutorials.GameDevelopment.movableObjects;
 
+import com.intellij.util.containers.IntObjectLinkedMap;
+import com.rizhiy.tutorials.GameDevelopment.base.ImageLoader;
 import com.rizhiy.tutorials.GameDevelopment.base.Vector2D;
+import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Animator;
+import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Assets;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.Check;
 import com.rizhiy.tutorials.GameDevelopment.coreMechanics.GameState;
 import com.rizhiy.tutorials.GameDevelopment.generator.Map;
@@ -8,6 +12,10 @@ import com.rizhiy.tutorials.GameDevelopment.generator.Map;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by rizhiy on 24/04/16.
@@ -16,14 +24,17 @@ public class Player implements KeyListener {
 
     //ration by which maxSpeed we be reached. Higher values lead to faster acc/decelerations.
     private double acceleration = 1;
-    private double deceleration = 1;
+    private double deceleration = 3;
 
     private Vector2D position;
 
-    public static double size = 0.8;
+    private double size = 0.8;
 
-    private static boolean up, right, down, left;
+    //TODO: look into replacing this with a map of moveDirection and mutable boolean object
+    private boolean up, right, down, left;
     private double maxSpeed = 5;
+
+    private HashMap<MoveDirection,Animator> sprites = new HashMap<>();
 
     /**
      * UP,DOWN,LEFT,RIGHT
@@ -31,12 +42,12 @@ public class Player implements KeyListener {
     private double[] speeds = {0, 0, 0, 0};
 
     //TODO: choose a better name
-    public enum SPEED {
-        UP(0), DOWN(1), LEFT(2), RIGHT(3);
+    public enum MoveDirection {
+        UP(0), DOWN(1), LEFT(2), RIGHT(3),IDLE(5);
 
         private int code;
 
-        SPEED(int c) {
+        MoveDirection(int c) {
             code = c;
         }
 
@@ -51,6 +62,27 @@ public class Player implements KeyListener {
 
     public void init() {
         position = new Vector2D(Map.width / 2, Map.height / 2);
+
+        ArrayList<BufferedImage> spriteUP = new ArrayList<>();
+        spriteUP.add(Assets.getPlayerAnimation(MoveDirection.UP,0));
+        spriteUP.add(Assets.getPlayerAnimation(MoveDirection.UP,1));
+        sprites.put(MoveDirection.UP,new Animator(spriteUP,200,true));
+
+        ArrayList<BufferedImage> spriteDOWN = new ArrayList<>();
+        spriteDOWN.add(Assets.getPlayerAnimation(MoveDirection.DOWN,0));
+        spriteDOWN.add(Assets.getPlayerAnimation(MoveDirection.DOWN,1));
+        sprites.put(MoveDirection.DOWN,new Animator(spriteDOWN,200,true));
+
+        ArrayList<BufferedImage> spriteLEFT = new ArrayList<>();
+        spriteLEFT.add(Assets.getPlayerAnimation(MoveDirection.LEFT,0));
+        spriteLEFT.add(Assets.getPlayerAnimation(MoveDirection.LEFT,1));
+        sprites.put(MoveDirection.LEFT,new Animator(spriteLEFT,200,true));
+
+        ArrayList<BufferedImage> spriteRIGHT = new ArrayList<>();
+        spriteRIGHT.add(Assets.getPlayerAnimation(MoveDirection.RIGHT,0));
+        spriteRIGHT.add(Assets.getPlayerAnimation(MoveDirection.RIGHT,1));
+        sprites.put(MoveDirection.RIGHT,new Animator(spriteRIGHT,200,true));
+
     }
 
     private void updateSpeed(boolean direction, int index, double deltaTime) {
@@ -66,7 +98,7 @@ public class Player implements KeyListener {
         }
     }
 
-    private boolean checkCollision(SPEED d, double change) {
+    private boolean checkCollision(MoveDirection d, double change) {
         Vector2D p1 = null, p2 = null;
         switch (d) {
             case UP:
@@ -90,15 +122,15 @@ public class Player implements KeyListener {
     }
 
     private void updateVector(Vector2D vector, double deltaTime, boolean map) {
-        updateSpeed(up, SPEED.UP.getCode(), deltaTime);
-        updateSpeed(down, SPEED.DOWN.getCode(), deltaTime);
-        updateSpeed(left, SPEED.LEFT.getCode(), deltaTime);
-        updateSpeed(right, SPEED.RIGHT.getCode(), deltaTime);
+        updateSpeed(up, MoveDirection.UP.getCode(), deltaTime);
+        updateSpeed(down, MoveDirection.DOWN.getCode(), deltaTime);
+        updateSpeed(left, MoveDirection.LEFT.getCode(), deltaTime);
+        updateSpeed(right, MoveDirection.RIGHT.getCode(), deltaTime);
 
-        double changeU = speeds[SPEED.UP.getCode()] * deltaTime;
-        double changeD = speeds[SPEED.DOWN.getCode()] * deltaTime;
-        double changeL = speeds[SPEED.LEFT.getCode()] * deltaTime;
-        double changeR = speeds[SPEED.RIGHT.getCode()] * deltaTime;
+        double changeU = speeds[MoveDirection.UP.getCode()] * deltaTime;
+        double changeD = speeds[MoveDirection.DOWN.getCode()] * deltaTime;
+        double changeL = speeds[MoveDirection.LEFT.getCode()] * deltaTime;
+        double changeR = speeds[MoveDirection.RIGHT.getCode()] * deltaTime;
 
         if (map) {
             changeU *= -Map.getTileSize();
@@ -107,25 +139,48 @@ public class Player implements KeyListener {
             changeR *= -Map.getTileSize();
         }
 
-        if (!checkCollision(SPEED.UP, changeU)) vector.changeY(-changeU);
-        else speeds[SPEED.UP.getCode()] = 0;
-        if (!checkCollision(SPEED.DOWN, changeD)) vector.changeY(changeD);
-        else speeds[SPEED.DOWN.getCode()] = 0;
-        if (!checkCollision(SPEED.LEFT, changeL)) vector.changeX(-changeL);
-        else speeds[SPEED.LEFT.getCode()] = 0;
-        if (!checkCollision(SPEED.RIGHT, changeR)) vector.changeX(changeR);
-        else speeds[SPEED.RIGHT.getCode()] = 0;
+        if (!checkCollision(MoveDirection.UP, changeU)) vector.changeY(-changeU);
+        else speeds[MoveDirection.UP.getCode()] = 0;
+        if (!checkCollision(MoveDirection.DOWN, changeD)) vector.changeY(changeD);
+        else speeds[MoveDirection.DOWN.getCode()] = 0;
+        if (!checkCollision(MoveDirection.LEFT, changeL)) vector.changeX(-changeL);
+        else speeds[MoveDirection.LEFT.getCode()] = 0;
+        if (!checkCollision(MoveDirection.RIGHT, changeR)) vector.changeX(changeR);
+        else speeds[MoveDirection.RIGHT.getCode()] = 0;
     }
 
     public void tick(double deltaTime) {
+        Vector2D oldPosition = new Vector2D(position);
         updateVector(position, deltaTime, false);
-        if (!GameState.playerMove) updateVector(GameState.mapPosition, deltaTime, true);
+        if(!position.equals(oldPosition)){
+            if (!GameState.playerMove) updateVector(GameState.mapPosition, deltaTime, true);
+        }
+
+        for(HashMap.Entry<MoveDirection,Animator> animator : sprites.entrySet()){
+            animator.getValue().update(System.currentTimeMillis());
+        }
     }
 
     public void render(Graphics2D g) {
-        g.fillRect((int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
-                   (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
-                   (int) (Map.getTileSize() * size), (int) (Map.getTileSize() * size));
+        BufferedImage img;
+        if(up){
+            img = sprites.get(MoveDirection.UP).getSprite();
+        } else if(down){
+            img = sprites.get(MoveDirection.DOWN).getSprite();
+        } else if(left){
+            img = sprites.get(MoveDirection.LEFT).getSprite();
+        } else if(right) {
+            img = sprites.get(MoveDirection.RIGHT).getSprite();
+        } else{
+            img = Assets.getPlayerAnimation(MoveDirection.IDLE,0);
+        }
+
+        g.drawImage(img,
+                    (int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
+                    (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
+                    (int) (Map.getTileSize() * size), (int) (Map.getTileSize() * size),
+                    null);
+
     }
 
     @Override
@@ -138,15 +193,19 @@ public class Player implements KeyListener {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_W:
                 up = true;
-                break;
-            case KeyEvent.VK_D:
-                right = true;
+                sprites.get(MoveDirection.UP).play();
                 break;
             case KeyEvent.VK_S:
                 down = true;
+                sprites.get(MoveDirection.DOWN).play();
                 break;
             case KeyEvent.VK_A:
                 left = true;
+                sprites.get(MoveDirection.LEFT).play();
+                break;
+            case KeyEvent.VK_D:
+                right = true;
+                sprites.get(MoveDirection.RIGHT).play();
                 break;
         }
     }
@@ -156,15 +215,19 @@ public class Player implements KeyListener {
         switch (keyEvent.getKeyCode()) {
             case KeyEvent.VK_W:
                 up = false;
-                break;
-            case KeyEvent.VK_D:
-                right = false;
+                sprites.get(MoveDirection.UP).stop();
                 break;
             case KeyEvent.VK_S:
                 down = false;
+                sprites.get(MoveDirection.DOWN).stop();
                 break;
             case KeyEvent.VK_A:
                 left = false;
+                sprites.get(MoveDirection.LEFT).stop();
+                break;
+            case KeyEvent.VK_D:
+                right = false;
+                sprites.get(MoveDirection.RIGHT).stop();
                 break;
         }
 

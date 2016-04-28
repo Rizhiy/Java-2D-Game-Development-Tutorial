@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 public class GameState implements KeyListener {
 
     public static double zoomLevel = 1.5;
-    private double zoomChangeRate = 1.001;
+    private double zoomChangeRate = 1.005;
 
     public static Map map;
 
@@ -39,19 +39,19 @@ public class GameState implements KeyListener {
     public synchronized void tick(double deltaTime) {
         map.tick(deltaTime);
 
-        //TODO: fix zoom
         if (increaseZoom) {
-            mapPosition.changeX(+Map.width * Map.getTileSize());
-            mapPosition.changeY(+Map.height * Map.getTileSize());
+            mapPosition.changeX(+map.getPlayer().getPosition().getX() * Map.getTileSize());
+            mapPosition.changeY(+map.getPlayer().getPosition().getY() * Map.getTileSize());
             zoomLevel *= zoomChangeRate;
-            mapPosition.changeY(-Map.height * Map.getTileSize());
+            mapPosition.changeX(-map.getPlayer().getPosition().getX() * Map.getTileSize());
+            mapPosition.changeY(-map.getPlayer().getPosition().getY() * Map.getTileSize());
         }
         if (decreaseZoom) {
-            mapPosition.changeX(+Map.width * Map.getTileSize());
-            mapPosition.changeY(+Map.height * Map.getTileSize());
+            mapPosition.changeX(+map.getPlayer().getPosition().getX() * Map.getTileSize());
+            mapPosition.changeY(+map.getPlayer().getPosition().getY() * Map.getTileSize());
             zoomLevel /= zoomChangeRate;
-            mapPosition.changeX(-Map.width * Map.getTileSize());
-            mapPosition.changeY(-Map.height * Map.getTileSize());
+            mapPosition.changeX(-map.getPlayer().getPosition().getX() * Map.getTileSize());
+            mapPosition.changeY(-map.getPlayer().getPosition().getY() * Map.getTileSize());
         }
     }
 

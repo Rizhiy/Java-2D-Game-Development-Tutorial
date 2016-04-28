@@ -20,6 +20,7 @@ public class Main {
     public static int display = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
 
     public static void main(String[] args){
+        Assets.init();
         GameState state = new GameState();
         state.init();
         PhysicsLoop physicsLoop = new PhysicsLoop(state,100);

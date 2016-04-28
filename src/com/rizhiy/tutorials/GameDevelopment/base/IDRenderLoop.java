@@ -1,6 +1,5 @@
 package com.rizhiy.tutorials.GameDevelopment.base;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -49,6 +48,5 @@ public abstract class IDRenderLoop extends BasicLoop {
         if (background != null) {
             g2.drawImage(background, 0, 0, null);
         }
-
     }
 }

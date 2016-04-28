@@ -39,7 +39,7 @@ public class Block extends Rectangle {
     }
 
     public void render(Graphics2D g) {
-        g.drawImage(Assets.getImage(type),
+        g.drawImage(Assets.getBlock(type),
                 (int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
                 (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
                 Map.getTileSize(), Map.getTileSize(), null);
@@ -51,6 +51,7 @@ public class Block extends Rectangle {
 
     public enum BlockType {
         STONE_1,
-        WALL_1
+        WALL_1,
+        WOOD_FLOOR_1
     }
 }
