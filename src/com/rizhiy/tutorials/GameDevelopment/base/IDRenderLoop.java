@@ -11,6 +11,8 @@ public abstract class IDRenderLoop extends BasicLoop {
     private int width;
     private int height;
 
+    private Rectangle drawingArea;
+
     protected Graphics2D graphics2D;
     private BufferedImage background;
 
@@ -36,6 +38,7 @@ public abstract class IDRenderLoop extends BasicLoop {
     public void init() {
         background = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         graphics2D = (Graphics2D) background.getGraphics();
+        drawingArea = new Rectangle(width,height);
     }
 
 
@@ -48,5 +51,9 @@ public abstract class IDRenderLoop extends BasicLoop {
         if (background != null) {
             g2.drawImage(background, 0, 0, null);
         }
+    }
+
+    public boolean isInside(Point point){
+        return drawingArea.contains(point);
     }
 }

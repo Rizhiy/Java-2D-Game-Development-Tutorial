@@ -27,6 +27,7 @@ public class Main {
         physicsLoop.init();
         RenderLoop renderLoop = new RenderLoop(width,height,60,state,physicsLoop);
         renderLoop.init();
+        state.addLoops(renderLoop,physicsLoop);
 
 
 

@@ -175,11 +175,7 @@ public class Player implements KeyListener {
             img = Assets.getPlayerAnimation(MoveDirection.IDLE,0);
         }
 
-        g.drawImage(img,
-                    (int) (position.getX() * Map.getTileSize() + GameState.mapPosition.getX()),
-                    (int) (position.getY() * Map.getTileSize() + GameState.mapPosition.getY()),
-                    (int) (Map.getTileSize() * size), (int) (Map.getTileSize() * size),
-                    null);
+        GameState.drawPicture(position,img);
 
     }
 
